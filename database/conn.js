@@ -11,7 +11,7 @@ async function connect() {
     mongoose.set('strictQuery', true)
     // const db = await mongoose.connect(getUri)
   
-    const db = await mongoose.connect(`${process.env.ATLAS_URI}`)
+    const db = await mongoose.connect(`mongodb+srv://saksham:${process.env. ATLAS_PASS}@cluster0.y3iucbq.mongodb.net/?retryWrites=true&w=majority`)
     console.log('Database connected')
     return db
   } catch (err) {
