@@ -1,30 +1,29 @@
-import nodemailer from 'nodemailer'
-import Mailgen from 'mailgen'
-import * as dotenv from 'dotenv';
-dotenv.config()
-import ENV from '../config.js'
+import nodemailer from "nodemailer";
+import Mailgen from "mailgen";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 //https://ethereal.email/create
 
 let nodeConfig = {
-  service: 'gmail',
+  service: "gmail",
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL, // generated ethereal user
     pass: process.env.PASSWORD, // generated ethereal password
   },
-}
+};
 
-let transporter = nodemailer.createTransport(nodeConfig)
+let transporter = nodemailer.createTransport(nodeConfig);
 
 let MailGenerator = new Mailgen({
-  theme: 'default',
+  theme: "default",
   product: {
-    name: 'Mailgen',
-    link: 'https://mailgen.js/',
+    name: "Mailgen",
+    link: "https://mailgen.js/",
   },
-})
+});
 
 /** POST: http://localhost:8080/api/registerMail 
     * @param : {
@@ -36,32 +35,31 @@ let MailGenerator = new Mailgen({
         
     } */
 export const registerMail = async (req, res) => {
-  const { username, userEmail, text, subject } = req.body
-
+  const { username, userEmail, text, subject } = req.body;
 
   // body of the email
   var email = {
     body: {
       name: username,
-      intro: `${text}` || 'This is my authentication',
-      outro: 'Need help , or have question? Just reply to this email.',
+      intro: `${text}` || "This is my authentication",
+      outro: "Need help , or have question? Just reply to this email.",
     },
-  }
-  var emailbody = MailGenerator.generate(email)
+  };
+  var emailbody = MailGenerator.generate(email);
   let message = {
     from: process.env.EMAIL,
     to: userEmail,
-    subject: subject || 'Signup Successfull',
+    subject: subject || "Signup Successfull",
     html: emailbody,
-  }
+  };
   transporter
     .sendMail(message)
     .then((info) => {
       return res.status(200).send({
-        msg: 'You should receive an email from us.',
+        msg: "You should receive an email from us.",
         info: info.messageId,
         preview: nodemailer.getTestMessageUrl(info),
-      })
+      });
     })
-    .catch((error) => [res.status(500).send({ error })])
-}
+    .catch((error) => [res.status(500).send({ error })]);
+};

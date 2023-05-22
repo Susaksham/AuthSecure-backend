@@ -1,21 +1,19 @@
 /* auth middleware */
-import jwt from 'jsonwebtoken'
-import ENV from '../config.js'
-import * as dotenv from 'dotenv';
+import jwt from "jsonwebtoken";
+import * as dotenv from "dotenv";
 dotenv.config();
 export default async function Auth(req, res, next) {
   try {
     // access authorize header to validate request
-    const token = req.headers.authorization.split(' ')[1]
+    const token = req.headers.authorization.split(" ")[1];
 
-  
-    const decodedToken =  jwt.verify(token, process.env.JWT_SECRET)
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = decodedToken
+    req.user = decodedToken;
 
-    next()
+    next();
   } catch (error) {
-    return res.status(401).json({ error: error })
+    return res.status(401).json({ error: error });
   }
 }
 
@@ -23,6 +21,6 @@ export function localVariables(req, res, next) {
   req.app.locals = {
     OTP: null,
     resetSession: false,
-  }
-  next()
+  };
+  next();
 }
