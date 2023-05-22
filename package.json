@@ -28,5 +28,8 @@
   },
   "devDependencies": {
     "dotenv": "^16.0.3"
+  },
+  "engines": {
+    "node": ">=15 <18"
   }
 }
